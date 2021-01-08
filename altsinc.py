@@ -117,24 +117,24 @@ def cic():
         try:
             modp(dsplash[i[0]][1], int(i[1]), token_splash, refresh_splash, 's')
         except Exception as e:
-            with pickle.load(open('erros.pkl', 'rb')) as log:
-                log.append([i[0], int(i[1]), str(e), 'MLsplash'])
-                pickle.dump(log, open('erros.pkl', 'wb'))
+            log = pickle.load(open('erros.pkl', 'rb'))
+            log.append([i[0], int(i[1]), str(e), 'MLsplash'])
+            pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         try:
             modp(dabib[i[0]][1], int(i[1]), token_abib, refresh_abib, 'a')
         except Exception as e:
-            with pickle.load(open('erros.pkl', 'rb')) as log:
-                log.append([i[0], int(i[1]), str(e), 'MLabib'])
-                pickle.dump(log, open('erros.pkl', 'wb'))
+            log = pickle.load(open('erros.pkl', 'rb')):
+            log.append([i[0], int(i[1]), str(e), 'MLabib'])
+            pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         driver = webdriver.Chrome(options = options)
         try:
             modolist(i[0], int(i[1]), driver)
         except Exception as e:
-            with pickle.load(open('erros.pkl', 'rb')) as log:
-                log.append([i[0], int(i[1]), str(e), 'olist'])
-                pickle.dump(log, open('erros.pkl', 'wb'))
+            log = pickle.load(open('erros.pkl', 'rb'))
+            log.append([i[0], int(i[1]), str(e), 'olist'])
+            pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         driver.close()
     if len(lista) > 0:
