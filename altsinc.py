@@ -151,18 +151,12 @@ def cic():
                     modp(dabib[i[0]][1], i[1], token_abib, refresh_abib, 'a')
                     corrigido.append(i)
                 except Exception as e:
-                    with pickle.load(open('erros.pkl', 'rb')) as log:
-                        log.append(['MLabib',i[0], i[1], e])
-                        pickle.dump(log, open('erros.pkl', 'wb'))
                     print(e)
             elif i[3] == "MLsplash":
                 try:
                     modp(dsplash[i[0]][1], i[1], token_splash, refresh_splash, 's')
                     corrigido.append(i)
                 except Exception as e:
-                    with pickle.load(open('erros.pkl', 'rb')) as log:
-                        log.append(['MLsplash', i[0], i[1], e])
-                        pickle.dump(log, open('erros.pkl', 'wb'))
                     print(e)
             elif i[3] == "olist":
                 driver = webdriver.Chrome(options = options)
@@ -170,9 +164,6 @@ def cic():
                     modolist(i[0], i[1], driver)
                     corrigido.append(i)
                 except Exception as e:
-                    with pickle.load(open('erros.pkl', 'rb')) as log:
-                        log.append(['olist', i[0], i[1], e])
-                        pickle.dump(log, open('erros.pkl', 'wb'))
                     print(e)
                 driver.close()
         atual = [x for x in erros if x not in corrigido]
