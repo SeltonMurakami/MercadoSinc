@@ -76,6 +76,10 @@
   {
    "optionDest": "datas",
    "value": "//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/keys.pkl;."
   }
  ],
  "nonPyinstallerOptions": {
