@@ -108,25 +108,67 @@ def cic():
         try:
             modp(dsplash[i[0]][1], int(i[1]), token_splash, refresh_splash, 's')
         except Exception as e:
-            with open('erros.txt', 'a') as f:
-                f.write(str(i[0])+": "+str(e))
+            with pickle.load(open('erros.pkl', 'rb')) as log:
+                log.append([i[0], int(i[1]), str(e), 'MLsplash'])
+                pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         try:
             modp(dabib[i[0]][1], int(i[1]), token_abib, refresh_abib, 'a')
         except Exception as e:
-            with open('erros.txt', 'a') as f:
-                f.write(str(i[0])+": "+str(e))
+            with pickle.load(open('erros.pkl', 'rb')) as log:
+                log.append([i[0], int(i[1]), str(e), 'MLabib'])
+                pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         driver = webdriver.Chrome(options = options)
         try:
             modolist(i[0], int(i[1]), driver)
         except Exception as e:
-            with open('erros.txt', 'a') as f:
-                f.write(str(i[1])+": "+str(e))
+            with pickle.load(open('erros.pkl', 'rb')) as log:
+                log.append([i[0], int(i[1]), str(e), 'olist'])
+                pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
         driver.close()
     if len(lista) > 0:
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
+    else:
+        print("Corrigindo Erros...")
+        erros = pickle.load("erros.pkl", "rb")
+        corrigido = []
+        for i in erros:
+            print("Corrigindo:", i[0])
+            if i[0] == i[2]:
+                continue
+            if i[3] == "MLabib":
+                try:
+                    modp(dabib[i[0]][1], i[1], token_abib, refresh_abib, 'a')
+                    corrigido.append(i)
+                except Exception as e:
+                    with pickle.load(open('erros.pkl', 'rb')) as log:
+                        log.append(['MLabib',i[0], i[1], e])
+                        pickle.dump(log, open('erros.pkl', 'wb'))
+                    print(e)
+            elif i[3] == "MLsplash":
+                try:
+                    modp(dsplash[i[0]][1], i[1], token_splash, refresh_splash, 's')
+                    corrigido.append(i)
+                except Exception as e:
+                    with pickle.load(open('erros.pkl', 'rb')) as log:
+                        log.append(['MLsplash', i[0], i[1], e])
+                        pickle.dump(log, open('erros.pkl', 'wb'))
+                    print(e)
+            elif i[3] == "olist":
+                driver = webdriver.Chrome(options = options)
+                try:
+                    modolist(i[0], i[1], driver)
+                    corrigido.append(i)
+                except Exception as e:
+                    with pickle.load(open('erros.pkl', 'rb')) as log:
+                        log.append(['olist', i[0], i[1], e])
+                        pickle.dump(log, open('erros.pkl', 'wb'))
+                    print(e)
+                driver.close()
+        atual = [x for x in erros if x not in corrigido]
+        pickle.dump(atual, open('erros.pkl', 'wb'))
 
 if __name__ == "__main__":
     while True:
