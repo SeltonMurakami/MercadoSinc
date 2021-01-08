@@ -37,6 +37,7 @@ def getqtd(file):
     return qtd
 
 def modolist(ean, n, driver):
+    print("Atualizando: ", ean)
     t = 6
     driver.get("https://app.olist.com/")
     time.sleep(t)
@@ -67,6 +68,7 @@ def modolist(ean, n, driver):
         print(e)
 
 def modp(nml, n, token, reftoken, conta):
+    print("Atualizando:", nml)
     if nml[0] == "#":
         nml = nml[1:]
     headers = {'Authorization':'Bearer '+token, "content-type": "application/json", "accept": "application/json"}
