@@ -1,0 +1,85 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/altsinc.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": true
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/PC003/Downloads/Paomedia-Small-N-Flat-Sign-sync.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "MercadoSinc"
+  },
+  {
+   "optionDest": "ascii",
+   "value": false
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "win_private_assemblies",
+   "value": false
+  },
+  {
+   "optionDest": "win_no_prefer_redirects",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/data_abib.pkl;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/data_splash.pkl;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/erros.pkl;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF;."
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}
