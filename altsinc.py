@@ -140,7 +140,7 @@ def cic():
     if len(lista) > 0:
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
     else:
-        erros = pickle.load("erros.pkl", "rb")
+        erros = pickle.load(open("erros.pkl", "rb"))
         corrigido = []
         for i in erros:
             print("Corrigindo:", i[0])
@@ -176,7 +176,8 @@ def cic():
                     print(e)
                 driver.close()
         atual = [x for x in erros if x not in corrigido]
-        pickle.dump(atual, open('erros.pkl', 'wb'))
+        pickle.dump({}, open('erros.pkl', 'wb'))
+        pickle.dump(atual, open('erros_b.pkl', 'wb'))
 
 if __name__ == "__main__":
     while True:
