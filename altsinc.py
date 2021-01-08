@@ -14,12 +14,13 @@ options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
+keys = pickle.load(open("keys.pkl", "rb"))
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
-token_splash = "APP_USR-6545766642471155-010715-f3704c368d7e0109413cde129a2b8342-291850849"
-refresh_splash = "TG-5ff5fe2dbb65270007f68b55-291850849"
-token_abib = "APP_USR-6545766642471155-010718-3e83f765cb6e809ca7acf3c98f63018d-657456460"
-refresh_abib = "TG-5ff752b1d56cb400066b95e8-657456460"
+token_splash = keys['token_s']
+refresh_splash = keys['refresh_s']
+token_abib = keys['token_a']
+refresh_abib = keys['refresh_a']
 tempo = 180
 
 def getqtd(file):
@@ -82,10 +83,16 @@ def modp(nml, n, token, reftoken, conta):
             if conta == "s":
                 token_splash = resp['access_token']
                 refresh_splash = resp['refresh_token']
+                keys['token_s'] = token_splash
+                keys['refresh_s'] = refresh_splash
+                pickle.dump(keys, open("keys.pkl", "wb"))
                 modp(nml, n, token_splash, refresh_splash, 's')
             else:
                 token_abib = resp['access_token']
                 refresh_abib = resp['refresh_token']
+                keys['token_a'] = token_abib
+                keys['refresh_a'] = refresh_abib
+                pickle.dump(keys, open("keys.pkl", "wb"))
                 modp(nml, n, token_abib, refresh_abib, 'a')
 
 
