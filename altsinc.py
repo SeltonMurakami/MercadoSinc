@@ -138,7 +138,6 @@ def cic():
     if len(lista) > 0:
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
     else:
-        print("Corrigindo Erros...")
         erros = pickle.load("erros.pkl", "rb")
         corrigido = []
         for i in erros:
