@@ -176,7 +176,7 @@ def cic():
                     print(e)
                 driver.close()
         atual = [x for x in erros if x not in corrigido]
-        pickle.dump({}, open('erros.pkl', 'wb'))
+        pickle.dump([], open('erros.pkl', 'wb'))
         pickle.dump(atual, open('erros_b.pkl', 'wb'))
 
 if __name__ == "__main__":
