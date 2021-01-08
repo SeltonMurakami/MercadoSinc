@@ -124,7 +124,7 @@ def cic():
         try:
             modp(dabib[i[0]][1], int(i[1]), token_abib, refresh_abib, 'a')
         except Exception as e:
-            log = pickle.load(open('erros.pkl', 'rb')):
+            log = pickle.load(open('erros.pkl', 'rb'))
             log.append([i[0], int(i[1]), str(e), 'MLabib'])
             pickle.dump(log, open('erros.pkl', 'wb'))
             print(e)
