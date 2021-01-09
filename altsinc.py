@@ -76,26 +76,26 @@ def modp(nml, n, token, reftoken, conta):
     url = "https://api.mercadolibre.com/items/MLB"+nml
     r = requests.put(url, data = arg, headers = headers)
     a = json.loads(r.text)
+    print(a)
     if r.status_code == 200:
         print(nml, "atualizado com sucesso.")
-    elif r.status_code == 400 or r.status_code == 403:
-        if a['error'] == "invalid_grant" or a['error'] == 'forbidden':
-            ref = requests.post("https://api.mercadolibre.com/oauth/token?grant_type=refresh_token&client_id="+client_id+"&client_secret="+client_secret+"&refresh_token="+reftoken)
-            resp = json.loads(ref.text)
-            if conta == "s":
-                token_splash = resp['access_token']
-                refresh_splash = resp['refresh_token']
-                keys['token_s'] = token_splash
-                keys['refresh_s'] = refresh_splash
-                pickle.dump(keys, open("keys.pkl", "wb"))
-                modp(nml, n, token_splash, refresh_splash, 's')
-            else:
-                token_abib = resp['access_token']
-                refresh_abib = resp['refresh_token']
-                keys['token_a'] = token_abib
-                keys['refresh_a'] = refresh_abib
-                pickle.dump(keys, open("keys.pkl", "wb"))
-                modp(nml, n, token_abib, refresh_abib, 'a')
+    else:
+        ref = requests.post("https://api.mercadolibre.com/oauth/token?grant_type=refresh_token&client_id="+client_id+"&client_secret="+client_secret+"&refresh_token="+reftoken)
+        resp = json.loads(ref.text)
+        if conta == "s":
+            token_splash = resp['access_token']
+            refresh_splash = resp['refresh_token']
+            keys['token_s'] = token_splash
+            keys['refresh_s'] = refresh_splash
+            pickle.dump(keys, open("keys.pkl", "wb"))
+            modp(nml, n, token_splash, refresh_splash, 's')
+        else:
+            token_abib = resp['access_token']
+            refresh_abib = resp['refresh_token']
+            keys['token_a'] = token_abib
+            keys['refresh_a'] = refresh_abib
+            pickle.dump(keys, open("keys.pkl", "wb"))
+            modp(nml, n, token_abib, refresh_abib, 'a')
 
 
 def cic():
