@@ -14,13 +14,9 @@ options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-keys = pickle.load(open("keys.pkl", "rb"))
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
-token_splash = keys['token_s']
-refresh_splash = keys['refresh_s']
-token_abib = keys['token_a']
-refresh_abib = keys['refresh_a']
+
 tempo = 180
 
 def getqtd(file):
@@ -105,6 +101,11 @@ def cic():
     qtd2 = getqtd("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF")
     dsplash = pickle.load(open("data_splash.pkl", "rb"))
     dabib = pickle.load(open("data_abib.pkl", "rb"))
+    keys = pickle.load(open("keys.pkl", "rb"))
+    token_splash = keys['token_s']
+    refresh_splash = keys['refresh_s']
+    token_abib = keys['token_a']
+    refresh_abib = keys['refresh_a']
     lista = []
     mciclo = []
     for i in qtd2:
