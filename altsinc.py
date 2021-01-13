@@ -14,13 +14,8 @@ options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-keys = pickle.load(open("keys.pkl", "rb"))
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
-token_splash = keys['token_s']
-refresh_splash = keys['refresh_s']
-token_abib = keys['token_a']
-refresh_abib = keys['refresh_a']
 tempo = 180
 
 def getqtd(file):
@@ -99,6 +94,11 @@ def modp(nml, n, token, reftoken, conta):
 
 
 def cic():
+    keys = pickle.load(open("keys.pkl", "rb"))
+    token_splash = keys['token_s']
+    refresh_splash = keys['refresh_s']
+    token_abib = keys['token_a']
+    refresh_abib = keys['refresh_a']
     qtd = getqtd("qtdloj.DBF")
     print('Esperando...('+datetime.now().strftime("%d/%m/%Y %H:%M:%S)"))
     time.sleep(tempo)
