@@ -17,6 +17,12 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
 
+keys = pickle.load(open("keys.pkl", "rb"))
+token_splash = keys['token_s']
+refresh_splash = keys['refresh_s']
+token_abib = keys['token_a']
+refresh_abib = keys['refresh_a']
+
 tempo = 180
 
 def getqtd(file):
