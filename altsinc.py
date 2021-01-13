@@ -94,17 +94,26 @@ def modp(nml, n, token, reftoken, conta):
 
 
 def cic():
+    #carrega os tokens
     keys = pickle.load(open("keys.pkl", "rb"))
     token_splash = keys['token_s']
     refresh_splash = keys['refresh_s']
     token_abib = keys['token_a']
     refresh_abib = keys['refresh_a']
+
+    #carrega quantidade local e espera
     qtd = getqtd("qtdloj.DBF")
     print('Esperando...('+datetime.now().strftime("%d/%m/%Y %H:%M:%S)"))
     time.sleep(tempo)
+
+    #carrega quantidade global
     qtd2 = getqtd("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF")
+
+    #carrega base de dados
     dsplash = pickle.load(open("data_splash.pkl", "rb"))
     dabib = pickle.load(open("data_abib.pkl", "rb"))
+
+    #compara local x global
     lista = []
     mciclo = []
     for i in qtd2:
@@ -113,6 +122,8 @@ def cic():
         if qtd2[i] != qtd[i] and i not in mciclo:
             lista.append([i, qtd2[i]])
             mciclo.append(i)
+
+    #sincroniza as diferenças     
     for i in lista:
         try:
             modp(dsplash[i[0]][1], int(i[1]), token_splash, refresh_splash, 's')
@@ -140,6 +151,7 @@ def cic():
     if len(lista) > 0:
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
     else:
+        #corrige erros quando não há nada para sincronizar
         erros = pickle.load(open("erros.pkl", "rb"))
         corrigido = []
         for i in erros:
