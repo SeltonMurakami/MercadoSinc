@@ -69,13 +69,14 @@ def modp(nml, n, token, reftoken, conta):
     headers = {'Authorization':'Bearer '+token, "content-type": "application/json", "accept": "application/json"}
     arg = "{available_quantity: "+str(n)+"}"
     url = "https://api.mercadolibre.com/items/MLB"+nml
-    r = requests.put(url, data = arg, headers = headers)
+    r = requests.get(url, headers = headers)
     a = json.loads(r.text)
     if len(a['variations']) > 0:
     	vari = a['variations']
     	for i in vari:
     		i['available_quantity'] = n
     	arg = json.dumps(vari)
+    r = requests.put(url, data = arg, headers = headers)
     if r.status_code == 200:
         print(nml, "atualizado com sucesso.")
     else:
