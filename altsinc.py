@@ -14,6 +14,7 @@ options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
+keys = pickle.load(open("keys.pkl", "rb"))
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
 tempo = 180
