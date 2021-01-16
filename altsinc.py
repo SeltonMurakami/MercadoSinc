@@ -71,7 +71,11 @@ def modp(nml, n, token, reftoken, conta):
     url = "https://api.mercadolibre.com/items/MLB"+nml
     r = requests.put(url, data = arg, headers = headers)
     a = json.loads(r.text)
-    print(a)
+    if len(a['variations']) > 0:
+    	vari = a['variations']
+    	for i in vari:
+    		i['available_quantity'] = n
+    	arg = json.dumps(vari)
     if r.status_code == 200:
         print(nml, "atualizado com sucesso.")
     else:
