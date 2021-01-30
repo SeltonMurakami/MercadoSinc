@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 import requests
 import json
+import socket
 
 options = webdriver.ChromeOptions()
 options.add_argument("--headless")
@@ -15,6 +16,15 @@ options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 keys = pickle.load(open("keys.pkl", "rb"))
+client = "splash_kids"
+host = '10.42.0.170'
+port = 8001
+s = socket.socket()
+s.connect((host, port))
+s.send(client.encode('utf-8'))
+auth = s.recv(1024).decode('utf-8')
+if auth == "forbidden":
+    exit()
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
 tempo = 180

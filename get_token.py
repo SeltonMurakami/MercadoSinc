@@ -18,7 +18,7 @@ with meli.ApiClient() as api_client:
     client_id = '6545766642471155' # Your client_id
     client_secret = 'TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE' # Your client_secret
     redirect_uri = 'http://localhost:3000' # Your redirect_uri
-    code = 'TG-5ff895e87b919100066e756a-657456460' # The parameter CODE
+    code = 'TG-601405080855720006a1a8d2-701138452' # The parameter CODE
     refresh_token = 'refresh_token_example' # Your refresh_token
 
 try:
