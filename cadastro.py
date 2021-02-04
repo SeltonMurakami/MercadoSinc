@@ -15,7 +15,7 @@ delargs = ['expiration_time','shipping', 'item_relations',
 "domain_id", "parent_item_id", "differential_pricing", "deal_ids", "date_created",
 "last_updated", "health", "catalog_listing", "official_store_id","video_id"]
 
-def getqtdno(file, file2):
+def getqtd(file, file2):
     qtd = {}
     esto = DBF(file, load = True)
     for i in esto.records:
