@@ -89,7 +89,7 @@ def modp(nml, n, token, reftoken, conta, ean):
     if len(s['variations']) > 1:
         arg = {'variations':[]}
         for n, i in enumerate(arg):
-            if i['id'] = ean:
+            if i['id'] == ean:
                 arg['variations'].append({"id":i['id'], "available_quantity":n}) 
     else:
         arg = {'available_quantity': n}

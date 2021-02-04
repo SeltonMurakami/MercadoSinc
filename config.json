@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/altsinc.py"
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/altsinc.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "C:/Users/PC003/Downloads/Paomedia-Small-N-Flat-Sign-sync.ico"
+   "value": "/home/selton/Downloads/Paomedia-Small-N-Flat-Sign-sync.ico"
   },
   {
    "optionDest": "name",
@@ -63,23 +63,35 @@
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/data_abib.pkl;."
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/a.pkl:."
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/data_splash.pkl;."
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/cadastro.py:."
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/PC003/Documents/GitHub/MercadoSinc/erros.pkl;."
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/data_abib.pkl:."
   },
   {
    "optionDest": "datas",
-   "value": "//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF;."
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/data_splash.pkl:."
   },
   {
    "optionDest": "datas",
-   "value": "C:/MercadoSinc/keys.pkl;."
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/erros.pkl:."
+  },
+  {
+   "optionDest": "datas",
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/keys.pkl:."
+  },
+  {
+   "optionDest": "datas",
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/log.pkl:."
+  },
+  {
+   "optionDest": "datas",
+   "value": "/home/selton/Documents/GitHub/MercadoSinc/relatorios:relatorios/"
   }
  ],
  "nonPyinstallerOptions": {
