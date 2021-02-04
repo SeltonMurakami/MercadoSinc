@@ -234,7 +234,7 @@ def cic():
                 try:
                     modolist(i[0], i[1], driver)
                 except Exception as e:
-                    print(i[0], "não está cadastrado no olist, ou seu cadastro ertá errado.")
+                    print(i[0], "não está cadastrado no olist")
                 driver.close()
         pickle.dump([], open('erros.pkl', 'wb'))
         pickle.dump(log, open('log.pkl', 'wb'))
