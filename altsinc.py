@@ -10,14 +10,17 @@ import requests
 import json
 import pandas as pd
 
+#lista de chaves e dia limite
 autentica = ['JK88CZGLC1WD', 'DVVCIYG4GESM', 'TQBZEVVJPMR0', '27994FQPMY0J', 'N951C3RKYZ8Z', '6HA07HVEI7AZ', 'IGPPSYNF27JC', 'F1ZQ7GJJ2N7J', '8XSUVCQQLQ2Y', 'EDJRA1A52N3K', 'FLBY92KGFTJG', '1AINOXR4DKLH']
 dialimite = 10
 
+#configurações do driver selenium
 options = webdriver.ChromeOptions()
 options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
+#carrega os tokens e refresh tokens
 keys = pickle.load(open("keys.pkl", "rb"))
 
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
@@ -25,6 +28,7 @@ client_id = "6545766642471155"
 tempo = 180
 print("MercadoSinc v1.0")
 
+#input: filepath de um arquivo .DBF, output: dict de quantidades
 def getqtd(file):
     qtd = {}
     esto = DBF(file, load = True)
@@ -38,6 +42,7 @@ def getqtd(file):
                 qtd[i['PROD']] = int(i['QTDE'])
     return qtd
 
+#atualiza olist
 def modolist(ean, n, driver):
     print("Atualizando: ", ean)
     t = 6
@@ -69,12 +74,17 @@ def modolist(ean, n, driver):
     except Exception as e:
         print(e)
 
+#atualiza ML
 def modp(nml, n, token, reftoken, conta, ean):
     print("Atualizando:", nml)
     if nml[0] == "#":
         nml = nml[1:]
+
+    #argumentos
     headers = {'Authorization':'Bearer '+token, "content-type": "application/json", "accept": "application/json"}
     url = "https://api.mercadolibre.com/items/MLB"+nml
+
+    #checa se o produto tem variações, e caso sim, modifica apenas uma delas
     s = json.loads(requests.get(url, headers=headers))
     if len(s['variations']) > 1:
         arg = {'variations':[]}
@@ -83,7 +93,11 @@ def modp(nml, n, token, reftoken, conta, ean):
                 arg['variations'].append({"id":i['id'], "available_quantity":n}) 
     else:
         arg = {'available_quantity': n}
+
+    #faz a atualização em si
     r = requests.put(url, data = json.dumps(arg), headers = headers)
+
+    #lida com a resposta
     if r.status_code == 200:
         print(nml, "atualizado com sucesso.")
     elif r.status_code == 403 or r.status_code == 401:
@@ -110,17 +124,19 @@ def modp(nml, n, token, reftoken, conta, ean):
 
 
 def cic():
-    #carrega os tokens
+    #checa por autorização de acesso
     dia = datetime.today().day
-    ind = datetime.today().month - 1 and dia == dialimite:
-    if ind != pickle.load('a.pkl', 'rb'):
+    ind = datetime.today().month - 1
+    if ind != pickle.load(open('a.pkl', 'rb')) and dia == dialimite:
         while True:
-            if input("Chave de Acesso deste mês: ") == autentica[ind]:
-                pickle.dump(inp, open("a.pkl", "wb"))
+            if input("Chave de Acesso deste mês("+str(ind+1)+"): ") == autentica[ind]:
+                pickle.dump(ind, open("a.pkl", "wb"))
                 print("Acesso liberado! a próxima chave deve ser inserida no mesmo dia, mês que vem.")
                 break
             else:
                 print("Chave errada! Tente Novamente")
+
+    #atualiza os tokens
     keys = pickle.load(open("keys.pkl", "rb"))
     token_splash = keys['token_s']
     refresh_splash = keys['refresh_s']
@@ -181,6 +197,7 @@ def cic():
             print(i,"não está cadastrado no OLIST, ou seu cadastro está errado.")
         driver.close()
     pickle.dump(erros, open('erros.pkl', 'wb'))
+    
     if len(lista) > 0:
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
     else:
@@ -190,8 +207,6 @@ def cic():
         log = pickle.load(open('log.pkl', 'rb'))
         for i in erros:
             print("Corrigindo:", i[0])
-            if i[0] == i[2]:
-                continue
             if i[3] == "MLabib":
                 try:
                     modp(dabib[i[0]][1], i[1], token_abib, refresh_abib, 'a')
