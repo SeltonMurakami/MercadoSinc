@@ -120,15 +120,15 @@ def dele(item, *args):
 			continue
 
 if __name__ == "__main__":
-	d = getqtd('qtdloj.DBF', 'PROD.DBF')
-	dataa = pickle.load(open('data_abib.pkl', 'rb'))
+    d = getqtd('qtdloj.DBF', 'PROD.DBF')
+    dataa = pickle.load(open('data_abib.pkl', 'rb'))
     datas = pickle.load(open('data_splash.pkl', 'rb'))
     token = pickle.load(open('keys.pkl', 'rb'))
-	print("Ferramenta de cadastro MercadoSinc.")
-	print("1 - para cadastrar o produtos detectados como não cadastrados.")
-	print("2 - cadastro por EAN")
-	if input("Selecione sua opção: ") == '1':
-		log = pickle.load(open('log.pkl','rb'))
+    print("Ferramenta de cadastro MercadoSinc.")
+    print("1 - para cadastrar o produtos detectados como não cadastrados.")
+    print("2 - cadastro por EAN")
+    if input("Selecione sua opção: ") == '1':
+    	log = pickle.load(open('log.pkl','rb'))
     	for i in log:
     		if log[i]["Erro"] != "Este produto não está cadastrado online, ou seu cadastro está errado.":
     			continue
