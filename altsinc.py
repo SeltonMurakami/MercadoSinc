@@ -9,6 +9,10 @@ import os
 import requests
 import json
 import pandas as pd
+import PySimpleGUI as gui
+
+layout = [[gui.Text(key = "texto")]]
+janela = gui.Window("MercadoSinc v1").layout(layout)
 
 #lista de chaves e dia limite
 autentica = ['JK88CZGLC1WD', 'DVVCIYG4GESM', 'TQBZEVVJPMR0', '27994FQPMY0J', 'N951C3RKYZ8Z', '6HA07HVEI7AZ', 'IGPPSYNF27JC', 'F1ZQ7GJJ2N7J', '8XSUVCQQLQ2Y', 'EDJRA1A52N3K', 'FLBY92KGFTJG', '1AINOXR4DKLH']
@@ -26,7 +30,10 @@ keys = pickle.load(open("keys.pkl", "rb"))
 client_secret = "TnkpxGW9LnCbaYrnGvetdZ2lfj3udxjE"
 client_id = "6545766642471155"
 tempo = 180
-print("MercadoSinc v1.0")
+
+def atualizajanela(*args):
+    event, values = janela.Read(timeout = 1)
+    janela['texto'].update(" ".join(args))
 
 #input: filepath de um arquivo .DBF, output: dict de quantidades
 def getqtd(file):
@@ -44,7 +51,7 @@ def getqtd(file):
 
 #atualiza olist
 def modolist(ean, n, driver):
-    print("Atualizando: ", ean)
+    atualizajanela("Atualizando: ", ean)
     t = 6
     driver.get("https://app.olist.com/")
     time.sleep(t)
@@ -72,11 +79,11 @@ def modolist(ean, n, driver):
         st.send_keys(Keys.ENTER)
         time.sleep(t)
     except Exception as e:
-        print(e)
+        atualizajanela(str(e))
 
 #atualiza ML
 def modp(nml, n, token, reftoken, conta, ean):
-    print("Atualizando:", nml)
+    atualizajanela("Atualizando:", nml)
     if nml[0] == "#":
         nml = nml[1:]
 
@@ -99,9 +106,9 @@ def modp(nml, n, token, reftoken, conta, ean):
 
     #lida com a resposta
     if r.status_code == 200:
-        print(nml, "atualizado com sucesso.")
+        atualizajanela(nml, "atualizado com sucesso.")
     elif r.status_code == 403 or r.status_code == 401:
-        print("Atualizando Access Token...")
+        atualizajanela("Atualizando Access Token...")
         ref = requests.post("https://api.mercadolibre.com/oauth/token?grant_type=refresh_token&client_id="+client_id+"&client_secret="+client_secret+"&refresh_token="+reftoken)
         resp = json.loads(ref.text)
         if conta == "s":
@@ -128,13 +135,18 @@ def cic():
     dia = datetime.today().day
     ind = datetime.today().month - 1
     if ind != pickle.load(open('a.pkl', 'rb')) and dia == dialimite:
+        layout2 = [[gui.Text("Chave de Acesso deste mês("+str(ind+1)+")", key = 'texto')],[gui.InputText("", key = "chave")], [gui.Button("Liberar Acesso")]]
+        acesso = gui.Window().layout(layout2)
+        event, values = acesso.Read()
         while True:
-            if input("Chave de Acesso deste mês("+str(ind+1)+"): ") == autentica[ind]:
+            if values['chave'] == autentica[ind]:
                 pickle.dump(ind, open("a.pkl", "wb"))
-                print("Acesso liberado! a próxima chave deve ser inserida no mesmo dia, mês que vem.")
+                gui.SystemTray.notify('Acesso Liberado!', 'Você deverá inserir a próxima senha mês que vem, no mesmo dia')
+                acesso.close()
                 break
             else:
-                print("Chave errada! Tente Novamente")
+                acesso['texto'].update("Chave errada! Tente Novamente")
+                event, values = acesso.Read()
 
     #atualiza os tokens
     keys = pickle.load(open("keys.pkl", "rb"))
@@ -145,7 +157,7 @@ def cic():
 
     #carrega quantidade local e espera
     qtd = getqtd("qtdloj.DBF")
-    print('Esperando...('+datetime.now().strftime("%d/%m/%Y %H:%M:%S)"))
+    atualizajanela('Esperando...('+datetime.now().strftime("%d/%m/%Y %H:%M:%S)"))
     time.sleep(tempo)
 
     #carrega quantidade global
@@ -160,7 +172,7 @@ def cic():
     mciclo = []
     for i in qtd2:
         if i not in qtd:
-            print(i, "cadastrado no sistema local.")
+            atualizajanela(i, "cadastrado no sistema local.")
             continue
         if qtd2[i] != qtd[i] and i not in mciclo:
             lista.append([i, qtd2[i]])
@@ -174,27 +186,27 @@ def cic():
         except Exception as e:
             erros.append([i[0], int(i[1]), str(e), 'MLsplash'])
             if e == KeyError:
-                print(i, "não está cadastrado online, ou seu cadastro está errado. Registrado em C:/MercadoSinc/relatorios/")
+                atualizajanela(i, "não está cadastrado online, ou seu cadastro está errado. Registrado em C:/MercadoSinc/relatorios/")
             elif "Erro do servidor Mercado Livre:" in str(e):
-                print(str(e))
+                atualizajanela(str(e))
             else:
-                print("Erro:",i,"Registrado em C:/MercadoSinc/relatorios/")
+                atualizajanela("Erro:",i,"Registrado em C:/MercadoSinc/relatorios/")
         try:
             modp(dabib[i[0]][1], int(i[1]), token_abib, refresh_abib, 'a', i[0])
         except Exception as e:
             erros.append([i[0], int(i[1]), str(e), 'MLabib'])
             if e == KeyError:
-                print(i, "não está cadastrado online, ou seu cadastro está errado. Registrado em C:/MercadoSinc/relatorios/")
+                atualizajanela(i, "não está cadastrado online, ou seu cadastro está errado. Registrado em C:/MercadoSinc/relatorios/")
             elif "Erro do servidor Mercado Livre:" in str(e):
-                print(str(e))
+                atualizajanela(str(e))
             else:
-                print("Erro:",i,"Registrado em C:/MercadoSinc/relatorios/")
+                atualizajanela("Erro:",i,"Registrado em C:/MercadoSinc/relatorios/")
         driver = webdriver.Chrome(options = options)
         try:
             modolist(i[0], int(i[1]), driver)
         except Exception as e:
             erros.append([i[0], int(i[1]), str(e), 'olist'])
-            print(i,"não está cadastrado no OLIST, ou seu cadastro está errado.")
+            atualizajanela(i,"não está cadastrado no OLIST, ou seu cadastro está errado.")
         driver.close()
     pickle.dump(erros, open('erros.pkl', 'wb'))
     
@@ -202,11 +214,11 @@ def cic():
         copyfile("//Fxsorbase/acsn/CENTRAL/DADOS/qtdloj.DBF", os.getcwd()+ "/qtdloj.DBF")
     else:
         #corrige erros quando não há nada para sincronizar
-        print("Iniciando correção automática...")
+        atualizajanela("Iniciando correção automática...")
         erros = pickle.load(open("erros.pkl", "rb"))
         log = pickle.load(open('log.pkl', 'rb'))
         for i in erros:
-            print("Corrigindo:", i[0])
+            atualizajanela("Corrigindo:", i[0])
             if i[3] == "MLabib":
                 try:
                     modp(dabib[i[0]][1], i[1], token_abib, refresh_abib, 'a')
@@ -234,7 +246,7 @@ def cic():
                 try:
                     modolist(i[0], i[1], driver)
                 except Exception as e:
-                    print(i[0], "não está cadastrado no olist")
+                    atualizajanela(i[0], "não está cadastrado no olist")
                 driver.close()
         pickle.dump([], open('erros.pkl', 'wb'))
         pickle.dump(log, open('log.pkl', 'wb'))
@@ -243,7 +255,8 @@ def cic():
 
 if __name__ == "__main__":
     while True:
+        event, values = janela.Read(timeout = tempo*1000)
         try:
             cic()
         except Exception as e:
-            print(e)
+            atualizajanela(str(e))
