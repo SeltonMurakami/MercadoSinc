@@ -41,9 +41,8 @@ tab2 = [
 ]
 
 tab3 = [
-    [sg.Button("<", key='prev'), sg.Image(
-        None, key="img"), sg.Button(">", key='next')],
-    [sg.T("", key='indfotos', size=(1, 10))]
+    [sg.Button("<", key='prev'),sg.T("", key='indfotos'), sg.Button(">", key='next')],
+    [sg.Image(None, key="img")]
 ]
 
 tab4 = [
@@ -103,6 +102,7 @@ def resultadobusca(search_term):
     windowb.close()
 
 def showitem(nml):
+    global img
     img = []
     dados = api.getitem(nml)
     for i in dados:
@@ -142,12 +142,14 @@ def showitem(nml):
     window['desc'].Widget.config(state='disabled')
     window['img'].update(img[imgind])
     window['indfotos'].update(str(imgind+1)+"/"+str(len(img)))
-    return img
 
 
 while True:
     event, values = window.read()
     if event in (None, 'Exit'):
+        for file in os.listdir(os.getcwd()):
+            if file.endswith('.png'):
+                os.remove(file) 
         break
 
     if event == '':
@@ -164,22 +166,18 @@ while True:
         for i in args:
             window[i].Widget.config(state='normal')
     if event == 'prev':
-        print(img)
-        if imgind > 0:
-            imgind -= 1
-            window['img'].update(img[imgind])
-            window['indfotos'].update(str(imgind+1)+"/"+str(len(img)))
+        imgind -= 1
+        window['img'].update(img[imgind%len(img)])
+        window['indfotos'].update(str(imgind%len(img)+1)+"/"+str(len(img)))
 
     if event == 'next':
-        print('b')
-        if imgind < len(img) - 1:
-            imgind += 1
-            window['img'].update(img[imgind])
-            window['indfotos'].update(str(imgind+1)+"/"+str(len(img)))
+        imgind += 1
+        window['img'].update(img[imgind%len(img)])
+        window['indfotos'].update(str(imgind%len(img)+1)+"/"+str(len(img)))
 
     if event == 'pushButton':
         try:
-            img = showitem(values['id'])
+            showitem(values['id'])
         except Exception as e:
             print(e)
     if event == 'publica':
