@@ -34,7 +34,7 @@ class meli():
 		if r.status_code == 401:
 			self.refresh()
 			return self.search(query, arg)
-		return json.loads(r)['results']
+		return json.loads(r.text)['results']
 
 	def setres(self, nml,res, val, varid = None):
 		url = "https://api.mercadolibre.com/items/"+nml
