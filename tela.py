@@ -5,7 +5,7 @@ import urllib
 import os
 from PIL import Image
 
-api = apiutils.meli("keys/key_pai.pkl", None)
+api = apiutils.meli("keys/key_selton.pkl", None)
 delargs = ['expiration_time', 'shipping', 'item_relations',
            'geolocation', 'end_time', 'inventory_id', 'stop_time',
            'start_time', 'id', 'site_id', 'seller_id', 'sold_quantity',
@@ -14,18 +14,20 @@ delargs = ['expiration_time', 'shipping', 'item_relations',
            "descriptions", "seller_address", "seller_contact", "location", "coverage_areas",
            "warnings", "listing_source", "status", "sub_status", "tags", "catalog_product_id",
            "domain_id", "parent_item_id", "differential_pricing", "deal_ids", "date_created",
-           "last_updated", "health", "catalog_listing", "official_store_id", "video_id"]
+           "last_updated", "health", "catalog_listing", "official_store_id", "video_id", "channels"]
 args = ['title', 'price', 'available_quantity', 'id']
 img = []
 imgind = 0
 tab1 = [
     [sg.Frame('', layout=[
+        [sg.I('', key = "search_term"), sg.B("Pesquisar", key = "search"), sg.T("              ", key="logistic_type")],
         [sg.T('ID'), sg.I('', key="id"), sg.B('Buscar', key='pushButton'),
          sg.B('Copiar', key='copy'), sg.B('Publicar', key='publica')],
         [sg.T('Nome', key='lblnome'), sg.I('', key='title'),
          sg.T('EAN', key='lblean'), sg.I('', key='ean')],
         [sg.T('Preço'), sg.I('', key='price'), sg.T(
             'Estoque'), sg.I('', key="available_quantity")],
+        [sg.T("Tempo de preparação"), sg.I('0', key = 'handling_time')],
         [sg.Frame('Descrição', key='descFrame', layout=[
             [sg.Multiline('', size=(100, 20), key='desc')]
         ])]
@@ -41,7 +43,7 @@ tab2 = [
 ]
 
 tab3 = [
-    [sg.Button("<", key='prev'),sg.T("", key='indfotos'), sg.Button(">", key='next')],
+    [sg.Button("<", key='prev'),sg.T("", key='indfotos'), sg.Button(">", key='next'), sg.B("Excluir", key = 'excluirimg', visible = False)],
     [sg.Image(None, key="img")]
 ]
 
@@ -50,21 +52,15 @@ tab4 = [
               col_widths=[50 for x in range(2)], row_height=20, auto_size_columns=False, key="var")]
 ]
 
-tab5 = [
-    [sg.I('', key = "search_term"), sg.B("Pesquisar", key = "search")]
-]
 
 layout = [[sg.TabGroup([[sg.Tab('Principal', tab1), sg.Tab(
-    'Atributos', tab2, key='tab2'), sg.Tab('Fotos', tab3), sg.Tab('Variações', tab4), sg.Tab("Pesquisar", tab5)]])]]
+    'Atributos', tab2, key='tab2'), sg.Tab('Fotos', tab3), sg.Tab('Variações', tab4)]])]]
 window = sg.Window('App', layout)
 
 
-def dele(item, *args):
+def dele(item, args):
     for i in args:
-        try:
-            del item[i]
-        except Exception as e:
-            continue
+        item.pop(i, None)
 
 
 def parseatt(l):
@@ -86,7 +82,7 @@ def resultadobusca(search_term):
             im = Image.open(i['id']+"_thumbnail."+formato).resize((200, 200), Image.ANTIALIAS)
             im.save(i['id']+"_thumbnail.png")
             os.remove(os.getcwd() + "/" + i['id']+"_thumbnail."+formato)
-        layoutb.append([sg.Image(i['id']+"_thumbnail.png"), sg.T(i['id']), sg.T(i['title']), sg.T(i['price']), sg.B('selecionar', key = i['id'])])
+        layoutb.append([sg.Image(i['id']+"_thumbnail.png"), sg.T(i['id']), sg.T(i['title']), sg.T(i['price']), sg.T(i['shipping']['logistic_type']), sg.B('selecionar', key = i['id'])])
     windowb = sg.Window('Busca', [[sg.Column(layoutb, size =  (1000,600),  scrollable = True)]])
     while True:
         event, values = windowb.read()
@@ -142,6 +138,7 @@ def showitem(nml):
     window['desc'].Widget.config(state='disabled')
     window['img'].update(img[imgind])
     window['indfotos'].update(str(imgind+1)+"/"+str(len(img)))
+    window['logistic_type'].update(dados['shipping']['logistic_type'])
 
 
 while True:
@@ -159,10 +156,11 @@ while True:
         desc = api.getdesc(values['id'])[0]['plain_text']
         base = api.getitem(values['id'])
         base['description'] = {'plain_text': desc}
-        dele(base, *delargs)
+        dele(base, delargs)
         window['alteraficha'].update(visible=True)
         window['alteragarantia'].update(visible=True)
         window['desc'].Widget.config(state='normal')
+        window['excluirimg'].update(visible = True)
         for i in args:
             window[i].Widget.config(state='normal')
     if event == 'prev':
@@ -193,8 +191,16 @@ while True:
                 base[i] = values[i]
         base['price'] = float(values['price'])
         base['available_quantity'] = int(values['available_quantity'])
-        sg.popup(api.publica(base, values['ean'], base['title']))
+        base['sale_terms'].append({"id":"MANUFACTURING_TIME", "value_name":values['handling_time']+" dias"})
+        #base['pictures'] = [os.getcwd()+"/"+x for x in img]
+        try:
+            sg.popup(api.publica(base, values['ean'], base['title']))
+        except Exception as e:
+            print(e)
     if event == 'search':
+        img = []
         resultadobusca(values['search_term'])
+    if event == 'excluirimg':
+        del img[imgind]
 
 window.close()

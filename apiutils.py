@@ -65,6 +65,9 @@ class meli():
 		if r.status_code == 401:
 			self.refresh()
 			return self.publica(item)
+		if r.status_code == 400:
+			print(r.text)
+			return
 		nml = json.loads(r.text)['id']
 		if self.data_path != None:
 			d = pickle.load(open(self.data_path, 'rb'))
