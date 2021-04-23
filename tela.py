@@ -93,6 +93,9 @@ def resultadobusca(search_term):
             pass
 
         else:
+            for file in os.listdir(os.getcwd()):
+                if file.endswith('.png'):
+                    os.remove(file) 
             showitem(event)
             break
     windowb.close()
@@ -153,6 +156,7 @@ while True:
         pass
 
     if event == 'copy':
+        base = {}
         desc = api.getdesc(values['id'])[0]['plain_text']
         base = api.getitem(values['id'])
         base['description'] = {'plain_text': desc}
